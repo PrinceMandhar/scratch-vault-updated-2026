@@ -1,0 +1,143 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Scratch Vault</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--tx:#14301f;--mut:#5b7a67;--ac:#157a3d;--ac2:#0d5c2d;--line:#dbe7df;--soft:#eef6f0}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,sans-serif;color:var(--tx);min-height:100vh;background:linear-gradient(#e3f1e8,#f6faf7 280px) #f6faf7;overflow-x:hidden}
+.wrap{max-width:1040px;margin:auto;padding:22px}h1{margin:.2em 0;font:800 1.6rem Inter,sans-serif;letter-spacing:-.01em;color:var(--ac2)}h1 span{color:var(--ac)}
+h2,h3{font-family:Inter,sans-serif;color:var(--ac2)}
+.panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;margin:14px 0;box-shadow:0 2px 12px #14301f0f}
+input,select,button{font:inherit;padding:12px 14px;border-radius:10px;border:1px solid #c7d8cd;background:#fff;color:var(--tx)}input:focus,select:focus{outline:2px solid var(--ac);border-color:var(--ac)}
+button{background:var(--ac);color:#fff;font-weight:600;border:0;cursor:pointer;transition:background .15s,transform .15s}button:hover{background:var(--ac2);transform:translateY(-1px)}button.s{background:var(--soft);color:var(--ac2);border:1px solid var(--line)}button.s:hover{background:#dff0e5}button.d{background:#c0392b;color:#fff}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.row>input{flex:1;min-width:150px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}.tile{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:12px;font-size:.85rem;color:var(--mut)}.tile b{font:800 1.7rem Inter,sans-serif;display:block;color:var(--ac)}
+table{width:100%;border-collapse:collapse;font-size:.85rem}th,td{padding:8px;text-align:left;border-bottom:1px solid var(--line)}th{color:var(--ac2);background:var(--soft)}.tbl{overflow-x:auto}
+.tabs button{margin:0 6px 6px 0}.err{color:#c0392b;margin:8px 0}.mut{color:var(--mut)}.copy{font-size:.75rem;padding:5px 9px}
+.hero{text-align:center;padding:10px 0 4px}.hero small{letter-spacing:.3em;color:var(--ac);font-size:.7rem;font-weight:700}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:26px;margin-top:20px;perspective:1200px}
+.card{position:relative;height:330px;border-radius:18px;overflow:hidden;background:#fff;box-shadow:0 14px 34px #14301f33,0 0 0 1px #14301f22;animation:deal .9s cubic-bezier(.2,.9,.3,1.2) both,float 6s ease-in-out infinite}
+@keyframes deal{from{transform:translate(-40vw,-60vh) rotate(-40deg) scale(.4);opacity:0}}
+@keyframes float{50%{transform:translateY(-5px)}}
+.card:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,transparent 30%,#ffffff44 48%,transparent 62%);background-size:250% 100%;animation:sheen 4.5s linear infinite}
+@keyframes sheen{from{background-position:200% 0}to{background-position:-100% 0}}
+.top{position:absolute;top:0;left:0;right:0;z-index:3;display:flex;justify-content:space-between;padding:10px 14px;font:700 .72rem Inter,sans-serif;letter-spacing:.12em;color:#fff;background:linear-gradient(90deg,#0d5c2d,#157a3d);pointer-events:none}
+.prize{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:44px 14px 14px;background:radial-gradient(circle at 50% 30%,#fff,#e8f4ec);color:var(--ac2)}
+.coin{width:112px;height:112px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;font:800 .75rem Inter,sans-serif;letter-spacing:.08em;color:#4b3500;background:conic-gradient(from 30deg,#fff2b0,#d9a520,#fff2b0,#b57d0c,#fff2b0);box-shadow:inset 0 0 0 6px #ffffff66,inset 0 0 0 10px #0000001f,0 10px 25px #0004;animation:spin .9s ease-out}
+.coin b{font-size:1.9rem;line-height:1}.silver .coin{color:#2b3140;background:conic-gradient(from 30deg,#fff,#a9b2c4,#fff,#7b859a,#fff)}
+@keyframes spin{from{transform:rotateY(720deg) scale(.3)}}
+.prize .big{font:700 1.05rem Inter,sans-serif;margin-top:10px}.prize .code{margin-top:10px;background:var(--ac2);color:#fff;padding:7px 14px;border-radius:8px;letter-spacing:.28em;font:700 1.05rem monospace}
+.prize small{opacity:.7;margin-top:4px}.prize button{margin-top:10px;font-size:.8rem;padding:8px 14px}
+canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:crosshair;z-index:2}
+.banner{background:#e3f4e9;border:1px solid #b9dfc6;color:var(--ac2);border-radius:12px;padding:14px;margin:14px 0;font-weight:600}
+.lock{text-align:center;color:var(--mut);font-size:.75rem;margin-top:18px}
+@media(max-width:600px){.wrap{padding:12px}h1{font-size:1.25rem}.grid{grid-template-columns:1fr}.card{width:86%;margin:0 auto}.row>button,.row>input{flex:1 1 100%}th,td{padding:6px 4px;font-size:.78rem}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+</style></head><body><div class="wrap" id="app"></div>
+<script>
+const $=s=>document.querySelector(s),app=$("#app"),Q=new URLSearchParams(location.search);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const api=async b=>{let r,j;try{r=await fetch("/api",{method:"POST",body:JSON.stringify(b)});j=await r.json()}catch(e){throw Error("Backend (/api) nahi mila. Netlify par deploy karein ya local me `netlify dev` use karein (Live Server me backend nahi chalta).")}if(!r.ok)throw Error(j.error||"Error");return j};
+const COLORS=[["#ff512f","#dd2476"],["#4776e6","#8e54e9"],["#11998e","#38ef7d"],["#f7971e","#ffd200"],["#ee0979","#ff6a00"],["#00c6ff","#0072ff"],["#654ea3","#eaafc8"],["#f953c6","#b91d73"]];
+const fmt=n=>Number(n).toLocaleString("en-IN");
+
+/* ================= PARTICIPANT ================= */
+const THEMES=[["#0d5c2d","#2fa05a"],["#0b6b57","#3bb89a"],["#14532d","#65a30d"],["#166534","#4ade80"],["#065f46","#34d399"],["#1b5e20","#8bc34a"],["#0f766e","#5eead4"],["#14532d","#22c55e"]];
+let ro=location.pathname.replace(/\/+$/,"")==="/team"||Q.has("team");
+let tok=ro?sessionStorage.vtok:sessionStorage.tok,S,tab="ov";
+if(Q.get("t")) party(); else admin();
+function party(){
+  const T=Q.get("t"),KEY="sv_"+T;let ctx,cards=[],pname="";
+  app.innerHTML=`<div class="hero"><small>EXCLUSIVE ADVANCE REWARD</small><h1> Scratch <span>Vault</span></h1></div><div class="panel" id="gate"><p class="mut">Apni details verify karein, phir aapke cards khulenge.</p>
+  <div class="row"><input id="pn" placeholder="Party name" autocomplete="off"><input id="ov" type="number" inputmode="numeric" placeholder="Order value (₹)"><button id="go">Verify &amp; Open Cards</button></div><div class="err" id="er"></div></div><div id="area"></div><div class="lock"> Secure · Har card unique code ke saath server par verified</div>`;
+  $("#go").onclick=()=>open({t:T,party:$("#pn").value,value:$("#ov").value});
+  async function open(c){try{const r=await api({a:"open",...c});ctx=c;sessionStorage[KEY]=JSON.stringify({party:c.party,value:c.value});pname=r.party;
+    const rev=r.cards.filter(x=>x.revealed),un=r.cards.filter(x=>!x.revealed).sort(()=>Math.random()-.5);cards=[...rev,...un];
+    $("#gate").style.display="none";draw()}catch(e){$("#er").textContent=e.message;sessionStorage.removeItem(KEY)}}
+  if(sessionStorage[KEY])open({t:T,...JSON.parse(sessionStorage[KEY])});
+  function draw(){
+    $("#area").innerHTML=`<h2 style="margin:0">Welcome, ${esc(pname)}</h2><p class="mut" id="prog"></p><div id="ban"></div><div class="grid"></div><p class="mut">Refresh karne par scratch na hue cards ka design aur position naya ho jayega. Scratch hua card hamesha wahi prize dikhata hai.</p>`;
+    $("#area .grid").append(...cards.map(cardEl));upd();
+  }
+  function upd(){const n=cards.filter(c=>c.revealed).length;$("#prog").textContent=n+" / "+cards.length+" cards scratched";
+    $("#ban").innerHTML=n==cards.length?`<div class="banner"> Saare cards scratch ho gaye! Har card par "Save / Share" dabakar image bhejein.<br><br><button id="all"> Save / Share all</button></div>`:"";
+    if(n==cards.length)$("#all").onclick=async()=>{for(const c of cards)await saveCard(c)}}
+  const coin=c=>{const g=c.wt.split(" ")[0];return `<div class="coin"><span>${c.cat.startsWith("Gold")?"GOLD":"SILVER"}</span><b>${g}</b><span>GRAM${g>1?"S":""}</span></div>`};
+  const prizeHTML=c=>`${coin(c)}<div class="big">${esc(c.cat)} · ${esc(c.wt)}</div><div class="code">${esc(c.code)}</div><small>Unique ID · ${esc(c.no)}</small><button class="sv"> Save / Share</button>`;
+  function fillPrize(el,c){const p=el.querySelector(".prize");p.className="prize "+(c.cat.startsWith("Silver")?"silver":"");p.innerHTML=prizeHTML(c);p.querySelector(".sv").onclick=()=>saveCard(c)}
+  function cardEl(c,i){
+    const el=document.createElement("div");el.className="card";el.style.animationDelay=i*.15+"s,"+(i*.15+1)+"s";
+    const [c1,c2]=THEMES[Math.floor(Math.random()*THEMES.length)],ph=Math.random()*360;
+    el.innerHTML=`<div class="top"><span>SCRATCH VAULT</span><span>№ ${esc(c.no)}</span></div><div class="prize"><div class="coin"><b>?</b></div></div>`;
+    if(c.revealed){fillPrize(el,c);return el}
+    const cv=document.createElement("canvas");el.appendChild(cv);
+    requestAnimationFrame(()=>{
+      const W=cv.width=el.clientWidth,H=cv.height=el.clientHeight,x=cv.getContext("2d");
+      const gr=x.createLinearGradient(0,0,W,H);gr.addColorStop(0,c1);gr.addColorStop(1,c2);x.fillStyle=gr;x.fillRect(0,0,W,H);
+      x.strokeStyle="#ffffff2a";x.lineWidth=1;for(let k=0;k<46;k++){x.beginPath();x.ellipse(W/2,H/2,20+k*6,12+k*7,ph+k*.07,0,7);x.stroke()}
+      x.fillStyle="#ffffff22";for(let k=0;k<160;k++)x.fillRect(Math.random()*W,Math.random()*H,2,2);
+      x.textAlign="center";x.fillStyle="#fff";x.shadowColor="#0008";x.shadowBlur=8;x.font="800 30px Inter,sans-serif";x.fillText(c.no,W/2,H/2-10);
+      x.font="700 14px Inter,sans-serif";x.fillText("SCRATCH TO REVEAL YOUR GIFT",W/2,H/2+24);x.shadowBlur=0;
+      let down=false,n=0,done=false;x.globalCompositeOperation="destination-out";
+      const sc=e=>{if(!down||done)return;const r=cv.getBoundingClientRect();x.beginPath();x.arc(e.clientX-r.left,e.clientY-r.top,24,0,7);x.fill();if(++n%8==0)chk()};
+      cv.onpointerdown=e=>{down=true;cv.setPointerCapture(e.pointerId);sc(e)};cv.onpointermove=sc;cv.onpointerup=cv.onpointercancel=()=>down=false;
+      async function chk(){const d=x.getImageData(0,0,W,H).data;let t=0;for(let k=3;k<d.length;k+=64)if(d[k]===0)t++;
+        if(t/(d.length/64)>.4){done=true;cv.style.transition="opacity .6s";cv.style.opacity=0;setTimeout(()=>cv.remove(),600);
+          try{const r=await api({a:"scratch",...ctx,no:c.no});Object.assign(c,r,{revealed:true});fillPrize(el,c);boom(el);upd()}catch(e){alert(e.message)}}}
+    });
+    return el;
+  }
+  async function saveCard(c){
+    const cv=document.createElement("canvas");cv.width=800;cv.height=1100;const x=cv.getContext("2d"),s=c.cat.startsWith("Silver");
+    const g=x.createLinearGradient(0,0,800,1100);g.addColorStop(0,"#ffffff");g.addColorStop(1,"#e1f1e6");x.fillStyle=g;x.fillRect(0,0,800,1100);
+    x.strokeStyle="#0d5c2d";x.lineWidth=10;x.strokeRect(30,30,740,1040);x.textAlign="center";x.fillStyle="#0d5c2d";
+    x.font="800 46px Inter,sans-serif";x.fillText("SCRATCH VAULT",400,120);x.font="600 28px Inter,sans-serif";x.fillText(pname,400,175);
+    const cg=x.createRadialGradient(340,380,20,400,430,190);cg.addColorStop(0,"#fff");cg.addColorStop(1,s?"#7b859a":"#b57d0c");x.fillStyle=cg;x.beginPath();x.arc(400,430,190,0,7);x.fill();
+    x.fillStyle="#0d5c2d";x.font="800 130px Inter,sans-serif";x.fillText(c.wt.split(" ")[0],400,455);x.font="700 34px Inter,sans-serif";x.fillText(s?"SILVER · GRAMS":"GOLD · GRAM",400,520);
+    x.font="800 62px Inter,sans-serif";x.fillText(c.cat,400,720);x.font="700 46px Inter,sans-serif";x.fillText(c.wt,400,785);
+    x.fillRect(110,840,580,120);x.fillStyle="#ffffff";x.font="800 64px monospace";x.fillText(c.code.split("").join(" "),400,920);
+    x.fillStyle="#0d5c2d";x.font="600 26px Inter,sans-serif";x.fillText("Card № "+c.no+" · "+new Date(c.at||Date.now()).toLocaleString("en-IN"),400,1020);
+    const blob=await new Promise(r=>cv.toBlob(r,"image/png")),fl=new File([blob],c.no+"-"+c.code+".png",{type:"image/png"});
+    if(navigator.canShare&&navigator.canShare({files:[fl]})){try{await navigator.share({files:[fl],title:"Scratch card "+c.no});return}catch(e){if(e.name==="AbortError")return}}
+    const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=fl.name;a.click();
+  }
+  function boom(el){for(let k=0;k<28;k++){const s=document.createElement("span");const c=["#157a3d","#d9a520","#8bc34a","#fff"][k%4];
+    s.style.cssText=`position:absolute;left:50%;top:50%;width:8px;height:8px;border-radius:2px;background:${c};z-index:5;transition:all 1s ease-out;pointer-events:none`;el.appendChild(s);
+    requestAnimationFrame(()=>{s.style.transform=`translate(${(Math.random()-.5)*320}px,${(Math.random()-.5)*320}px) rotate(${Math.random()*360}deg)`;s.style.opacity=0});setTimeout(()=>s.remove(),1000)}}
+}
+
+/* ================= ADMIN ================= */
+function admin(){tok?load():loginUI("");setInterval(()=>{if(tok&&!/INPUT|SELECT/.test(document.activeElement.tagName))load()},8000)}
+function loginUI(m){app.innerHTML=`<div class="hero"><small>${ro?"TEAM ACCESS · VIEW ONLY":"RESTRICTED ACCESS"}</small><h1>${ro?" Team":" Master"} <span>${ro?"Dashboard":"Admin"}</span></h1></div><div class="panel row"><input id="pw" type="password" placeholder="${ro?"Team":"Admin"} password"><button id="lg">Login</button></div><div class="row" style="justify-content:center"><button class="${ro?"s":""}" id="sa"> Admin login</button><button class="${ro?"":"s"}" id="st"> Team login</button></div><div class="err">${esc(m||"")}</div><p class="mut" style="text-align:center;font-size:.75rem">Build v4 · Admin + Team login</p>`;
+  $("#sa").onclick=()=>{ro=false;tok=null;loginUI("")};$("#st").onclick=()=>{ro=true;tok=null;loginUI("")};
+  $("#lg").onclick=async()=>{try{const r=await api({a:"login",password:$("#pw").value,role:ro?"view":"admin"});tok=r.tok;sessionStorage[ro?"vtok":"tok"]=tok;load()}catch(e){loginUI(e.message)}}}
+async function load(){try{S=await api({a:ro?"vstate":"state",tok});render()}catch(e){sessionStorage.removeItem(ro?"vtok":"tok");tok=null;loginUI(e.message)}}
+const act=async(b)=>{try{await api({...b,tok});await load()}catch(e){alert(e.message)}};
+function render(){
+  const K=[["Gold Coin","1 gram"],["Silver Coin","10 gram"],["Silver Coin","20 gram"]];
+  const c=S.cards,cnt=s=>c.filter(x=>x.status===s).length;
+  const link=t=>location.origin+"/?t="+t.token;
+  let h=`<div class="row"><h1 style="flex:1"> Scratch <span>Vault</span> — ${ro?"Team View":"Master"}</h1><button class="s" onclick="sessionStorage.clear();location.reload()">Logout</button></div>
+  <div class="tabs">${[["ov","Overview"],["tk","Tickets"],["cd","Cards / UTR"],["lg","Audit Log"]].map(([k,n])=>`<button class="${tab==k?"":"s"}" onclick="tab='${k}';render()">${n}</button>`).join("")}</div>`;
+  if(tab=="ov")h+=`<div class="panel"><div class="tiles">
+   <div class="tile">Total<b>${c.length}</b></div><div class="tile">Available<b>${cnt("Available")}</b></div><div class="tile">Assigned<b>${cnt("Assigned")}</b></div><div class="tile">Scratched<b>${cnt("Revealed")}</b></div>
+   <div class="tile">Gold 1g left<b>${c.filter(x=>x.cat=="Gold Coin"&&x.status=="Available").length}</b></div><div class="tile">Silver 10g left<b>${c.filter(x=>x.wt=="10 gram"&&x.status=="Available").length}</b></div><div class="tile">Silver 20g left<b>${c.filter(x=>x.wt=="20 gram"&&x.status=="Available").length}</b></div></div></div>
+   <div class="panel tbl"><h3> Live: recent scratches <small class="mut">(auto-refresh 8s)</small></h3><table><tr><th>Time</th><th>Party</th><th>Card</th><th>UTR</th><th>Prize</th><th>Claim</th></tr>${c.filter(x=>x.revealedAt).sort((a,b)=>b.revealedAt.localeCompare(a.revealedAt)).slice(0,15).map(x=>`<tr><td>${new Date(x.revealedAt).toLocaleString("en-IN")}</td><td>${esc(x.party)}</td><td>${x.no}</td><td><b>${x.code}</b></td><td>${x.cat} ${x.wt}</td><td>${x.claim}</td></tr>`).join("")||"<tr><td colspan=6 class=mut>Abhi koi scratch nahi hua</td></tr>"}</table></div>
+   <div class="panel tbl"><h3>Coin-wise stock</h3><table><tr><th>Coin</th><th>Total</th><th>Available</th><th>Assigned</th><th>Scratched</th></tr>${K.map(([a,w])=>{const f=x=>x.cat==a&&x.wt==w;return `<tr><td>${a} ${w}</td><td>${c.filter(f).length}</td><td>${c.filter(x=>f(x)&&x.status=="Available").length}</td><td>${c.filter(x=>f(x)&&x.status=="Assigned").length}</td><td>${c.filter(x=>f(x)&&x.status=="Revealed").length}</td></tr>`}).join("")}</table></div>
+   ${ro?"":`<div class="panel"><h3>Create New Ticket</h3><div class="row"><input id="p1" placeholder="Party name"><input id="p2" type="number" placeholder="Advance / order value ₹"><input id="p3" type="number" placeholder="Cards (auto: 2.5L = 1)"><button onclick="mk()">Create + Random Assign</button></div><p class="mut">Cards auto: ₹2.5 lakh = 1, ₹10 lakh = 4. Random coins available stock se allot honge.</p><div id="nl"></div></div>
+   <div class="panel"><button onclick="csv()"> Excel/CSV Export (UTR + coins + party + status)</button> <button class="s" onclick="bk()"> Full Backup (JSON)</button> <button class="d" onclick="rs()"> Reset all data</button></div>`}`;
+  if(tab=="tk")h+=`<div class="panel tbl"><table><tr><th>ID</th><th>Party</th><th>Value</th><th>Cards</th><th>Scratched</th><th>Status</th>${ro?"":"<th>Link</th>"}</tr>${S.tickets.map(t=>`<tr><td>${t.id}</td><td>${esc(t.party)}</td><td>₹${fmt(t.value)}</td><td>${t.cards.length}</td><td>${t.cards.filter(n=>c.find(x=>x.no==n).status=="Revealed").length}</td><td>${t.status}</td>${ro?"":`<td><button class="copy" onclick="cp('${link(t)}')">Copy link</button> <button class="copy d" onclick="act({a:'revoke',id:'${t.id}'})">${t.status=="Active"?"Revoke":"Restore"}</button></td>`}</tr>`).join("")}</table></div>`;
+  if(tab=="cd")h+=`<div class="panel"><input id="q" placeholder="UTR code / party / card no search" oninput="rows()" style="width:100%"></div><div class="panel tbl"><table id="ct"></table></div>`;
+  if(tab=="lg")h+=`<div class="panel tbl"><table>${S.log.map(l=>`<tr><td>${new Date(l.at).toLocaleString("en-IN")}</td><td>${esc(l.who)}</td><td>${esc(l.act)}</td></tr>`).join("")}</table></div>`;
+  app.innerHTML=h;if(tab=="cd")rows();
+}
+function rows(){const q=($("#q")?.value||"").toLowerCase();
+  $("#ct").innerHTML=`<tr><th>Card</th><th>UTR</th><th>Coin</th><th>Status</th><th>Party</th><th>Revealed</th><th>Claim</th></tr>`+S.cards.filter(c=>!q||[c.no,c.code,c.party].join(" ").toLowerCase().includes(q)).map(c=>`<tr><td>${c.no}</td><td><b>${c.code}</b></td><td>${c.cat} ${c.wt}</td><td>${c.status}</td><td>${esc(c.party)}</td><td>${c.revealedAt?new Date(c.revealedAt).toLocaleString("en-IN"):""}</td><td>${ro?esc(c.claim):c.status=="Revealed"?`<select onchange="act({a:'claim',no:'${c.no}',claim:this.value})">${["Pending","Approved","Fulfilled","Rejected"].map(o=>`<option ${o==c.claim?"selected":""}>${o}</option>`).join("")}</select>`:""}</td></tr>`).join("")}
+async function mk(){try{const r=await api({a:"create",tok,party:$("#p1").value,value:$("#p2").value,qty:$("#p3").value});await load();const l=location.origin+"/?t="+r.ticket.token;
+  $("#nl")&&($("#nl").innerHTML=`<p> ${r.ticket.id} ready — private link:</p><input readonly value="${l}" style="width:100%"><br><br><button onclick="cp('${l}')">Copy link</button>`)}catch(e){alert(e.message)}}
+const cp=t=>navigator.clipboard.writeText(t).then(()=>alert("Link copied"));
+async function rs(){const c=prompt('Sab data (tickets, scratches) delete hoga. Confirm ke liye RESET ALL likhein');if(c!=='RESET ALL')return;const pw=prompt('Admin password dobara daalein');try{await api({a:'reset',tok,confirm:c,password:pw});alert('Reset ho gaya');load()}catch(e){alert(e.message)}}
+async function bk(){const j=await api({a:'backup',tok});const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(j,null,1)],{type:'application/json'}));a.download='scratch-vault-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click()}
+function csv(){const H=["Card","UTR Code","Category","Weight","Status","Party","Ticket","Revealed At","Claim"];
+  const r=S.cards.map(c=>[c.no,c.code,c.cat,c.wt,c.status,c.party,c.ticket,c.revealedAt,c.claim].map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(","));
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff"+[H.join(","),...r].join("\n")],{type:"text/csv"}));a.download="scratch-cards-utr.csv";a.click()}
+</script></body></html>
